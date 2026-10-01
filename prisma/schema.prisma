@@ -60,3 +60,9 @@ model Media{
 
 }
 
+
+model Role{
+  id        Int       @default(autoincrement())
+  name      String    @unique
+}
+
