@@ -1,0 +1,20 @@
+import  Express from "express"
+import userrouter from "./routers/user.router.js"
+import postrouter from "./routers/post.router.js"
+import { errorHandler } from "./middleware/error.js"
+
+const app=Express()
+
+app.use(Express.json())
+app.use(userrouter)
+app.use(postrouter)
+app.use(errorHandler)
+
+
+app.get("/",(req,res)=>{
+    res.json({
+        "message":"welcome to my typescripts course"
+    });
+})
+
+export default app;
