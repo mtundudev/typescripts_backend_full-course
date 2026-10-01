@@ -23,6 +23,7 @@ model User{
   updated_at  DateTime     @updatedAt
 
   posts Post[]
+  media Media[]
 }
 
 
@@ -31,9 +32,31 @@ model Post{
   title           String   
   content         String?
   author_id       Int
+  image_id        Int?@unique
   created_at      DateTime       @default(now())
   updated_at      DateTime       @updatedAt
 
   author    User @relation(fields:[author_id],references:[id],onDelete:Cascade)
+  image Media?
+  
+}
+
+
+model Media{
+  id                Int       @id         @default(autoincrement())
+  path              String  
+  filename          String
+  newfilename       String
+  mime_type         String
+  uploaded_by       Int
+  post_id           Int@unique
+  size              Int
+  uploaded_at       DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+
+
+  post Post @relation(fields:[post_id],references:[id],onDelete:Cascade)
+  user User@relation(fields:[uploaded_by],references:[id],onDelete:Cascade)
+
 }
 
