@@ -12,6 +12,7 @@ export const PostSchemaResponse=z.object({
     author_id:z.number(),
     title:z.string().min(5,"title must have at least 5 chatacter"),
     content:z.string().min(10,"atleast 10 characters").optional(),
+    image_id:z.number().nullable(),
     created_at:z.date(),
     updated_at:z.date()
 })
