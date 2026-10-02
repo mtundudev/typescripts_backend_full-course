@@ -24,9 +24,33 @@ export async function create(data:userCreate) {
     return user
 }
 
-export async function showall() {
-    const user= await prisma.user.findMany()
-    return user  
+export async function showall(page:number,limit:number) {
+    page=Math.max(1,page);
+    limit=Math.min(Math.max(1,limit),100);
+    const skip= (page-1)*limit
+    const [users,total]=await prisma.$transaction([
+        prisma.user.findMany({
+            skip,
+            take:limit,
+            orderBy:{
+                id:"asc"
+            },
+        }),
+        prisma.user.count()
+    ]);
+    const totalpages=Math.ceil(total/limit)
+    return{
+        users:users,
+        pagination:{
+            page,
+            limit,
+            total,
+            totalpages,
+            hasnext:page<totalpages,
+            hasprevious:page>1
+
+        }
+    } 
 }
 
 export async function singleuser(id:number) {
