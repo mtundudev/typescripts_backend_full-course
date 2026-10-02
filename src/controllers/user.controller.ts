@@ -1,6 +1,6 @@
 import {create,showall,singleuser,userUpdate,deleteuser} from "../services/user.service.js";
 import type { Response,Request } from "express";
-import { UserSchemaCreate,UserResponseSchema } from "../schemas/user.js";
+import { UserSchemaCreate,UserResponseSchema, PaginationResponse } from "../schemas/user.js";
 import z from "zod";
 
 export async function usercreate(req:Request,res:Response) {
@@ -13,8 +13,8 @@ export async function usercreate(req:Request,res:Response) {
 }
 
 export async function allUser(req:Request,res:Response) {
-    const  user=await showall()
-    const response=z.array(UserResponseSchema).parse(user);
+    const  user=await showall(Number(req.query.page),Number(req.query.limit))
+    const response=PaginationResponse.parse(user);
     return res.status(201).json(response)
     
 }

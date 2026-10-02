@@ -22,3 +22,16 @@ export const UserResponseSchema=z.object({
 
 
 })
+
+
+export const PaginationResponse=z.object({
+    users:z.array(UserResponseSchema),
+    pagination:z.object({
+        page:z.number(),
+        limit:z.number(),
+        total:z.number(),
+        totalpages:z.number(),
+        hasnext:z.boolean(),
+        hasprevious:z.boolean(), 
+    })
+})

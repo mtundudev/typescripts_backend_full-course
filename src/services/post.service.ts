@@ -18,10 +18,34 @@ export async function createpost(data:postschemacreate,id:number) {
     return post
     
 }
-export async function allpost() {
-    const post=await prisma.post.findMany()
-    return post
+export async function allpost(page:number=1,limit:number=10) {
     
+    page=Math.max(1,page)
+    limit=Math.min(Math.max(1,limit),100)
+    const skip=(page-1)*limit
+
+    const [posts,total]=await prisma.$transaction([
+        prisma.post.findMany({
+            skip,
+            take:limit,
+            orderBy:{
+                id:"asc",
+            },
+        }),
+        prisma.post.count(),
+    ]);
+    const totalpages=Math.ceil(total/limit);
+    return{
+        posts:posts,
+        pagination:{
+            page,
+            limit,
+            total,
+            totalpages,
+            hasNestpages:page<totalpages,
+            hasPreviouspage:page>1
+        }
+    }
 }
 
 export async function showpost(id:number) {
