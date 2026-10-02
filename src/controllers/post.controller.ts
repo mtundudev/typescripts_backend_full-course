@@ -17,9 +17,8 @@ export async function create_post(req:Request,res:Response) {
 }
 
 export async function all_post(req:Request,res:Response) {
-    const post=await allpost() 
-    const response=z.array( PostSchemaResponse).parse(post)
-    return res.status(200).json(response)
+    const post=await allpost(Number(req.query.page),Number(req.query.limit) )
+    return res.status(200).json(post)
 }
 export async function my_posts(req:Request,res:Response) {
     const posts=await myposts(Number(req.userId));
